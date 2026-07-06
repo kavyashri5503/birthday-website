@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Gym Squad Wishes You!</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #050a14 0%, #0a1730 50%, #07111f 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #f7f3eb;
+      position: relative;
+    }
+
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(242, 196, 111, 0.5);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .particle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+    .particle:nth-child(2) { top: 60%; left: 85%; animation-delay: 1s; }
+    .particle:nth-child(3) { top: 40%; left: 20%; animation-delay: 2s; }
+    .particle:nth-child(4) { top: 80%; left: 60%; animation-delay: 3s; }
+    .particle:nth-child(5) { top: 30%; left: 70%; animation-delay: 1.5s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); opacity: 0.3; }
+      50% { transform: translateY(-30px); opacity: 0.8; }
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: #f2c46f;
+      text-shadow: 0 0 30px rgba(242, 196, 111, 0.3);
+      margin-bottom: 0.5rem;
+      animation: fadeDown 1s ease-out;
+    }
+
+    .page-subtitle {
+      font-size: 1.2rem;
+      color: #c7d0df;
+      font-weight: 300;
+      margin-bottom: 3rem;
+      animation: fadeDown 1s ease-out 0.2s both;
+    }
+
+    .squad-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+      animation: fadeUp 1s ease-out 0.4s both;
+    }
+
+    .animal-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(242, 196, 111, 0.15);
+      border-radius: 20px;
+      padding: 1.2rem 1rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .animal-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #f2c46f, #ff9f7f, #7fd8be);
+      opacity: 0.6;
+    }
+
+    .animal-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(242, 196, 111, 0.4);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .animal-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 14px;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .animal-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #f2c46f;
+      margin-bottom: 0.3rem;
+    }
+
+    .animal-role {
+      font-size: 0.8rem;
+      color: #c7d0df;
+      font-weight: 300;
+      margin-bottom: 0.8rem;
+      font-style: italic;
+    }
+
+    .animal-wish {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #d8dce6;
+      font-weight: 300;
+    }
+
+    .animal-wish strong {
+      color: #f2c46f;
+      font-weight: 500;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      animation: fadeUp 1s ease-out 0.6s both;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.9rem 2.2rem;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #f2c46f 0%, #d4a843 100%);
+      color: #0a1730;
+      box-shadow: 0 4px 20px rgba(242, 196, 111, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 35px rgba(242, 196, 111, 0.5);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #c7d0df;
+      border: 1px solid rgba(242, 196, 111, 0.3);
+    }
+
+    .btn-secondary:hover {
+      border-color: rgba(242, 196, 111, 0.6);
+      color: #f2c46f;
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 1100px) {
+      .squad-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .squad-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+      .page-title {
+        font-size: 2rem;
+      }
+      .animal-img {
+        height: 130px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .squad-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
+  <div class="content">
+    <h1 class="page-title">The GYM SQUAD</h1>
+    <p class="page-subtitle">has a few birthday reps for you, Trainer!</p>
+
+    <div class="squad-grid">
+      <div class="animal-card">
+        <img src="gym_buddies\gym-cow.jpg" alt="Moo-scle Cow" class="animal-img" />
+        <h3 class="animal-name">Moo-scle Cow</h3>
+        <p class="animal-role">Chugging protein shakes after leg day</p>
+        <p class="animal-wish">"Happy Birthday! May your gains be as <strong>strong</strong> as your wisdom. Keep moo-ving forward!"</p>
+      </div>
+
+      <div class="animal-card">
+        <img src="gym_buddies\gym-lion.jpg" alt="Lift King Lion" class="animal-img" />
+        <h3 class="animal-name">Lift King Lion</h3>
+        <p class="animal-role">Deadlifting with perfect form</p>
+        <p class="animal-wish">"Roaring wishes on your special day! <strong>Deadlift</strong> every challenge life throws at you!"</p>
+      </div>
+
+      <div class="animal-card">
+        <img src="gym_buddies\gym-cat.jpg" alt="Flexi Cat" class="animal-img" />
+        <h3 class="animal-name">Flexi Cat</h3>
+        <p class="animal-role">Mastering the yoga tree pose</p>
+        <p class="animal-wish">"Purr-fect birthday vibes! Stay <strong>flexible</strong>, balanced, and keep striking excellence!"</p>
+      </div>
+
+      <div class="animal-card">
+        <img src="gym_buddies\gym-rabbit.jpg" alt="Bunny Bouncer" class="animal-img" />
+        <h3 class="animal-name">Bunny Bouncer</h3>
+        <p class="animal-role">Push-up champion of the meadow</p>
+        <p class="animal-wish">"Hop-py Birthday! May you <strong>bounce back</strong> from every challenge stronger than ever!"</p>
+      </div>
+
+      <div class="animal-card">
+        <img src="gym_buddies\gym-pig.jpg" alt="Squat Pig" class="animal-img" />
+        <h3 class="animal-name">Squat Pig</h3>
+        <p class="animal-role">Oinking through every rep</p>
+        <p class="animal-wish">"Wishing you a day as <strong>plump with joy</strong> as my squats are deep! Oink oink!"</p>
+      </div>
+
+      <div class="animal-card">
+        <img src="gym_buddies\gym-penguin.jpg" alt="Chill Penguin" class="animal-img" />
+        <h3 class="animal-name">Chill Penguin</h3>
+        <p class="animal-role">Cool curls in the cardio zone</p>
+        <p class="animal-wish">"Stay <strong>cool</strong> and keep sliding through life with style! Happy Birthday!"</p>
+      </div>
+
+      <div class="animal-card">
+        <img src="gym_buddies\gym-owl.jpg" alt="Wise Owl" class="animal-img" />
+        <h3 class="animal-name">Wise Owl</h3>
+        <p class="animal-role">Reading while riding the bike</p>
+        <p class="animal-wish">"Wishing you <strong>wisdom</strong> and wellness in equal measure this year!"</p>
+      </div>
+
+      <div class="animal-card">
+        <img src="gym_buddies\gym-dog.jpg" alt="Run Dog" class="animal-img" />
+        <h3 class="animal-name">Run Dog</h3>
+        <p class="animal-role">Sprinting on the treadmill</p>
+        <p class="animal-wish">"Run into your best year yet! Stay <strong>loyal</strong> to your dreams, Professor!"</p>
+      </div>
+
+      <div class="animal-card">
+        <img src="gym_buddies\gym-monkey.jpg" alt="Bar Monkey" class="animal-img" />
+        <h3 class="animal-name">Bar Monkey</h3>
+        <p class="animal-role">Pull-up master of the jungle gym</p>
+        <p class="animal-wish">"Swing into a year full of <strong>adventure</strong> and bananas! Happy Birthday!"</p>
+      </div>
+
+      <div class="animal-card">
+        <img src="gym_buddies\gym-elephant.jpg" alt="Boxer Elephant" class="animal-img" />
+        <h3 class="animal-name">Boxer Elephant</h3>
+        <p class="animal-role">Punching bags with heavy power</p>
+        <p class="animal-wish">"May your year be <strong>unstoppable</strong> and your celebrations never forgettable!"</p>
+      </div>
+    </div>
+
+    <div class="nav-buttons">
+      <a href="page2.html" class="btn btn-secondary">← Back </a>
+      <a href="page4.html" class="btn btn-primary">Next → Memories</a>
+    </div>
+  </div>
+
+</body>
+</html>

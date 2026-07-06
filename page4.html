@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Professor's Memories</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #050a14 0%, #0a1730 50%, #07111f 100%);
+      min-height: 100vh;
+      color: #f7f3eb;
+      position: relative;
+    }
+
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(242, 196, 111, 0.4);
+      border-radius: 50%;
+      animation: float 7s ease-in-out infinite;
+    }
+
+    .particle:nth-child(1) { top: 15%; left: 8%; animation-delay: 0s; }
+    .particle:nth-child(2) { top: 55%; left: 90%; animation-delay: 1.5s; }
+    .particle:nth-child(3) { top: 35%; left: 25%; animation-delay: 3s; }
+    .particle:nth-child(4) { top: 75%; left: 70%; animation-delay: 2s; }
+    .particle:nth-child(5) { top: 25%; left: 60%; animation-delay: 0.5s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); opacity: 0.3; }
+      50% { transform: translateY(-25px); opacity: 0.7; }
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: #f2c46f;
+      text-shadow: 0 0 30px rgba(242, 196, 111, 0.3);
+      margin-bottom: 0.5rem;
+      animation: fadeDown 1s ease-out;
+    }
+
+    .page-subtitle {
+      font-size: 1.1rem;
+      color: #c7d0df;
+      font-weight: 300;
+      margin-bottom: 2.5rem;
+      animation: fadeDown 1s ease-out 0.2s both;
+    }
+
+    /* ===== TABS ===== */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 1s ease-out 0.3s both;
+    }
+
+    .tab-btn {
+      padding: 0.8rem 2.5rem;
+      background: transparent;
+      border: 1px solid rgba(242, 196, 111, 0.3);
+      border-radius: 50px;
+      color: #c7d0df;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn:hover {
+      border-color: rgba(242, 196, 111, 0.6);
+      color: #f2c46f;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #f2c46f 0%, #d4a843 100%);
+      color: #0a1730;
+      border-color: transparent;
+      box-shadow: 0 4px 20px rgba(242, 196, 111, 0.3);
+    }
+
+    .tab-panel {
+      display: none;
+      animation: fadeUp 0.5s ease-out;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* ===== GRID ===== */
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .media-card {
+      position: relative;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(242, 196, 111, 0.12);
+      border-radius: 18px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .media-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(242, 196, 111, 0.35);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+    }
+
+    .media-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .media-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .media-label {
+      padding: 0.9rem 1rem;
+      font-size: 0.9rem;
+      color: #d8dce6;
+      font-weight: 400;
+      text-align: left;
+    }
+
+    /* ===== VIDEO CARD (inline play) ===== */
+    .video-card {
+      position: relative;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(242, 196, 111, 0.12);
+      border-radius: 18px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .video-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(242, 196, 111, 0.35);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+    }
+
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .video-wrap video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .video-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.35);
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .video-overlay.hidden {
+      opacity: 0;
+    }
+
+    .play-icon {
+      width: 50px;
+      height: 50px;
+      background: rgba(242, 196, 111, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .play-icon::after {
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 16px solid #0a1730;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      margin-left: 4px;
+    }
+
+    .video-card:hover .play-icon {
+      transform: scale(1.15);
+    }
+
+    .video-card.playing .video-overlay {
+      opacity: 0;
+    }
+
+    .video-card.paused .video-overlay {
+      opacity: 1;
+    }
+
+    /* ===== LIGHTBOX (photos only) ===== */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(2, 5, 10, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .lightbox.active {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .lightbox-content {
+      position: relative;
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    .lightbox-content img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -50px;
+      right: 0;
+      width: 44px;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      color: #f7f3eb;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .lightbox-close:hover {
+      background: rgba(242, 196, 111, 0.2);
+      border-color: #f2c46f;
+      color: #f2c46f;
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      color: #f7f3eb;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .lightbox-nav:hover {
+      background: rgba(242, 196, 111, 0.2);
+      border-color: #f2c46f;
+      color: #f2c46f;
+    }
+
+    .lightbox-prev { left: -70px; }
+    .lightbox-next { right: -70px; }
+
+    /* ===== NAV BUTTONS ===== */
+    .nav-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      animation: fadeUp 1s ease-out 0.6s both;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.9rem 2.2rem;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #f2c46f 0%, #d4a843 100%);
+      color: #0a1730;
+      box-shadow: 0 4px 20px rgba(242, 196, 111, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 35px rgba(242, 196, 111, 0.5);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #c7d0df;
+      border: 1px solid rgba(242, 196, 111, 0.3);
+    }
+
+    .btn-secondary:hover {
+      border-color: rgba(242, 196, 111, 0.6);
+      color: #f2c46f;
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .page-title {
+        font-size: 2rem;
+      }
+      .media-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1rem;
+      }
+      .media-card img,
+      .video-wrap {
+        height: 150px;
+      }
+      .lightbox-prev,
+      .lightbox-next {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
+  <div class="content">
+    <h1 class="page-title">Treasured Moments ⭐</h1>
+    <p class="page-subtitle">Keep smiling, keep shining and keep making beautiful memories</p>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('photos')">Photos</button>
+      <button class="tab-btn" onclick="switchTab('videos')">Videos</button>
+    </div>
+
+    <!-- Photos Panel -->
+    <div id="photos" class="tab-panel active">
+      <div class="media-grid">
+        <div class="media-card" >
+          <img src="photos/photo1.jpeg" alt="Memory 1" />
+          <div class="media-label">Mahira Birthday 🪅</div>
+        </div>
+        <div class="media-card" >
+          <img src="photos/photo2.jpeg" alt="Memory 2" />
+          <div class="media-label">Temple run 😉</div>
+        </div>
+        <div class="media-card" >
+          <img src="photos/photo3.jpeg" alt="Memory 3" />
+          <div class="media-label">Family outing 🥰</div>
+        </div>
+        <div class="media-card" >
+          <img src="photos/photo4.jpeg" alt="Memory 4" />
+          <div class="media-label"> Weekend 🥳</div>
+        </div>
+        <div class="media-card" >
+          <img src="photos/photo5.jpeg" alt="Memory 5" />
+          <div class="media-label"> Aananthagiri hills 🏕️</div>
+        </div>
+        <div class="media-card" >
+          <img src="photos/photo6.jpeg" alt="Memory 6" />
+          <div class="media-label"> Infy Family 🫣</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Videos Panel -->
+    <div id="videos" class="tab-panel">
+      <div class="media-grid">
+        <div class="video-card" onclick="toggleVideo(this)">
+          <div class="video-wrap">
+            <video src="videos/video1.mp4" loop playsinline preload="metadata"></video>
+            <div class="video-overlay"><div class="play-icon"></div></div>
+          </div>
+          <div class="media-label"> Trio ❤️</div>
+        </div>
+        <div class="video-card" onclick="toggleVideo(this)">
+          <div class="video-wrap">
+            <video src="videos/video2.mp4" loop playsinline preload="metadata"></video>
+            <div class="video-overlay"><div class="play-icon"></div></div>
+          </div>
+          <div class="media-label"> overaction final boss 😜</div>
+        </div>
+        <div class="video-card" onclick="toggleVideo(this)">
+          <div class="video-wrap">
+            <video src="videos/video3.mp4" loop playsinline preload="metadata"></video>
+            <div class="video-overlay"><div class="play-icon"></div></div>
+          </div>
+          <div class="media-label"> Hike 🤩</div>
+        </div>
+        <div class="video-card" onclick="toggleVideo(this)">
+          <div class="video-wrap">
+            <video src="videos/video4.mp4" loop playsinline preload="metadata"></video>
+            <div class="video-overlay"><div class="play-icon"></div></div>
+          </div>
+          <div class="media-label"> Master chef 👨🏻‍🍳</div>
+        </div>
+        <div class="video-card" onclick="toggleVideo(this)">
+          <div class="video-wrap">
+            <video src="videos/video5.mp4" loop playsinline preload="metadata"></video>
+            <div class="video-overlay"><div class="play-icon"></div></div>
+          </div>
+          <div class="media-label">Hero feeling 😎</div>
+        </div>
+        <div class="video-card" onclick="toggleVideo(this)">
+          <div class="video-wrap">
+            <video src="videos/video6.mp4" loop playsinline preload="metadata"></video>
+            <div class="video-overlay"><div class="play-icon"></div></div>
+          </div>
+          <div class="media-label"> food expert 😋</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-buttons">
+      <a href="page3.html" class="btn btn-secondary">← Back to Gym Squad</a>
+      <a href="index.html" class="btn btn-primary">Back to Start</a>
+    </div>
+  </div>
+
+  <!-- Lightbox (Photos Only) -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+      <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+      <button class="lightbox-nav lightbox-prev" onclick="changePhoto(-1)">&#10094;</button>
+      <button class="lightbox-nav lightbox-next" onclick="changePhoto(1)">&#10095;</button>
+      <div id="lightbox-media"></div>
+    </div>
+  </div>
+
+  <script>
+    const photoList = [
+      'photos/photo1.jpeg',
+      'photos/photo2.jpeg',
+      'photos/photo3.jpeg',
+      'photos/photo4.jpeg',
+      'photos/photo5.jpeg',
+      'photos/photo6.jpeg'
+    ];
+
+    let currentPhotoIndex = 0;
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById(tab).classList.add('active');
+    }
+
+    // Photos: open in lightbox
+    function openLightbox(index) {
+      currentPhotoIndex = index;
+      updateLightbox();
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function updateLightbox() {
+      const container = document.getElementById('lightbox-media');
+      container.innerHTML = `<img src="${photoList[currentPhotoIndex]}" alt="Memory" />`;
+    }
+
+    function closeLightbox(e) {
+      if (!e || e.target.id === 'lightbox' || e.target.classList.contains('lightbox-close')) {
+        document.getElementById('lightbox').classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function changePhoto(dir) {
+      currentPhotoIndex = (currentPhotoIndex + dir + photoList.length) % photoList.length;
+      updateLightbox();
+    }
+
+    // Videos: play/pause inline with audio
+    function toggleVideo(card) {
+      const video = card.querySelector('video');
+      const overlay = card.querySelector('.video-overlay');
+
+      if (video.paused) {
+        // Pause any other playing videos first
+        document.querySelectorAll('.video-card video').forEach(v => {
+          if (v !== video) {
+            v.pause();
+            v.currentTime = 0;
+            v.closest('.video-card').querySelector('.video-overlay').style.opacity = '1';
+          }
+        });
+
+        video.play().then(() => {
+          overlay.style.opacity = '0';
+        }).catch(err => {
+          console.log('Play failed:', err);
+        });
+      } else {
+        video.pause();
+        overlay.style.opacity = '1';
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (!document.getElementById('lightbox').classList.contains('active')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') changePhoto(-1);
+      if (e.key === 'ArrowRight') changePhoto(1);
+    });
+  </script>
+
+</body>
+</html>
